@@ -18,13 +18,13 @@ const Packages = () => {
                     <div class="row">
                       <div class="col-md-8">
                         <a href="javascript:void(0)" class="text-body">
-                          <p>Google - Google Home - White</p>
+                          <p>Monthly with Trainer</p>
                         </a>
-                        <div class="text-muted mb-1 d-flex flex-wrap"><span class="me-1">Sold by:</span> <a href="javascript:void(0)" class="me-3">Apple</a> <span class="badge bg-label-success">In Stock</span></div>
+                        <div class="text-muted mb-1 d-flex flex-wrap"><span class="me-1">Time Per/Day:</span> <a href="javascript:void(0)" class="me-3">2 hours</a> <span class="badge bg-label-success">available</span></div>
                       </div>
                       <div class="col-md-4">
                         <div class="text-md-end">
-                          <div class="my-2 my-lg-4"><span class="text-primary">$299/</span><s class="text-muted">$359</s></div>
+                          <div class="my-2 my-lg-4"><span class="text-primary">$60/</span><s class="text-muted">$100</s></div>
                         </div>
                       </div>
                     </div>
@@ -40,13 +40,13 @@ const Packages = () => {
                     <div class="row">
                       <div class="col-md-8">
                         <a href="javascript:void(0)" class="text-body">
-                          <p>Apple iPhone 11 (64GB, Black)</p>
+                          <p>Monthly without trainer</p>
                         </a>
-                        <div class="text-muted mb-1 d-flex flex-wrap"><span class="me-1">Sold by:</span> <a href="javascript:void(0)" class="me-3">Apple</a> <span class="badge bg-label-success">In Stock</span></div>
+                        <div class="text-muted mb-1 d-flex flex-wrap"><span class="me-1">Time:</span> <a href="javascript:void(0)" class="me-3">1 hour</a> <span class="badge bg-label-success">available</span></div>
                       </div>
                       <div class="col-md-4">
                         <div class="text-md-end">
-                          <div class="my-2 my-lg-4"><span class="text-primary">$299/</span><s class="text-muted">$359</s></div>
+                          <div class="my-2 my-lg-4"><span class="text-primary">$20/</span><s class="text-muted">$40</s></div>
                         </div>
                       </div>
                     </div>
@@ -62,16 +62,16 @@ const Packages = () => {
               <h6>Price Details</h6>
               <dl class="row mb-0">
 
-                <dt class="col-6 fw-normal text-heading">Order Total</dt>
-                <dd class="col-6 text-end">$1198.00</dd>
+                <dt class="col-6 fw-normal text-heading">Name</dt>
+                <dd class="col-6 text-end">Monthly Trainer</dd>
 
-                <dt class="col-sm-6 text-heading fw-normal">Delivery Charges</dt>
-                <dd class="col-sm-6 text-end"><s class="text-muted">$5.00</s> <span class="badge bg-label-success ms-1">Free</span></dd>
+                <dt class="col-sm-6 text-heading fw-normal">Duration</dt>
+                <dd class="col-sm-6 text-end">Monthly <span class="badge bg-label-success ms-1"></span></dd>
               </dl>
               <hr class="mx-n4" />
               <dl class="row mb-0">
                 <dt class="col-6 text-heading">Total</dt>
-                <dd class="col-6 fw-medium text-end text-heading mb-0">$1198.00</dd>
+                <dd class="col-6 fw-medium text-end text-heading mb-0">$20</dd>
               </dl>
             </div>
           </div>

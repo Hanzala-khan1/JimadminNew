@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
-import {  useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -24,8 +24,8 @@ const AddnewMember = () => {
         try {
             await RegisterUserSchema.validate(values, { abortEarly: false });
 
-           values["BusinessLocation"]= user.BusinessLocation[0]._id.toString()
-           values["status"]= "active"
+            values["BusinessLocation"] = user.BusinessLocation[0]._id.toString()
+            values["status"] = "active"
 
             const formData = new FormData();
             Object.entries(values).forEach(([key, value]) => {
@@ -69,7 +69,7 @@ const AddnewMember = () => {
                     transition: Bounce,
                 });
             }
-           resetForm();
+            resetForm();
         } catch (error) {
             console.log("error.response.data.message", error)
             toast.error(error?.response?.data?.message, {
@@ -127,7 +127,7 @@ const AddnewMember = () => {
                                 <div className="row mb-3">
                                     <label className="col-sm-3 col-form-label text-sm-end">Contact</label>
                                     <div className="col-sm-9">
-                                        <Field type="text" name="phone" className="form-control" placeholder="Enter Contact No. Here"  maxLength={13}/>
+                                        <Field type="text" name="phone" className="form-control" placeholder="Enter Contact No. Here" maxLength={13} />
                                         <ErrorMessage name="phone" component="div" className="text-danger" />
                                     </div>
                                 </div>
@@ -160,12 +160,14 @@ const AddnewMember = () => {
                                                 <div>
                                                     <input
                                                         type="file"
-                                                        id="inputGroupFile02"
+                                                        name="images"
                                                         onChange={(event) => {
-                                                            form.setFieldValue(field.name, event.currentTarget.files);
+                                                            const files = Array.from(event.currentTarget.files);
+                                                            console.log(files)
+                                                            setFieldValue("images", files);
                                                         }}
-                                                        className="form-control"
-                                                        multiple
+
+                                                        accept="image/*"
                                                     />
                                                     <ErrorMessage name="images" component="div" className="text-danger" />
                                                 </div>

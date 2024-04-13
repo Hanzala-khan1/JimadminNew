@@ -27,7 +27,7 @@ const AddNewJim = () => {
         try {
 
             const formValues = await RegisterGymSchema.validate(values, { abortEarly: false });
-            formValues["status"]="active"
+            formValues["status"] = "active"
             const formData = new FormData();
 
             Object.entries(formValues).forEach(([key, value]) => {
@@ -37,7 +37,7 @@ const AddNewJim = () => {
                 console.log("key ::", formData[key])
             });
 
-            
+
             if (formValues.images && formValues.images.length > 0) {
                 formValues.images.forEach((image) => {
                     formData.append('images', image);
@@ -102,21 +102,21 @@ const AddNewJim = () => {
                     <div className="card mb-4">
                         <h5 className="card-header">Add New Gym</h5>
                         <Formik
-                           initialValues={{
-                            full_name: '',
-                            email: '',
-                            password: '',
-                            gymName: '',
-                            gymAddress: '',
-                            phone: '',
-                            city: '',
-                            description: '',
-                            images: [],
-                        }}
-                        validationSchema={RegisterGymSchema}
-                        onSubmit={handleSubmit}
-                        validateOnBlur={true}
-                        validateOnChange={true}
+                            initialValues={{
+                                full_name: '',
+                                email: '',
+                                password: '',
+                                gymName: '',
+                                gymAddress: '',
+                                phone: '',
+                                city: '',
+                                description: '',
+                                images: [],
+                            }}
+                            validationSchema={RegisterGymSchema}
+                            onSubmit={handleSubmit}
+                            validateOnBlur={true}
+                            validateOnChange={true}
                         >
                             {({ isSubmitting, setFieldValue, values }) => (
                                 <Form className="card-body">
@@ -177,12 +177,15 @@ const AddNewJim = () => {
                                                     <div>
                                                         <input
                                                             type="file"
-                                                            id="inputGroupFile02"
-                                                            onChange={(event) => {
-                                                                form.setFieldValue(field.name, event.currentTarget.files);
-                                                            }}
-                                                            className="form-control"
+                                                            name="images"
                                                             multiple
+                                                            onChange={(event) => {
+                                                                const files = Array.from(event.currentTarget.files);
+                                                                console.log(files)
+                                                                setFieldValue("images", files);
+                                                            }}
+
+                                                            accept="image/*"
                                                         />
                                                         <ErrorMessage name="images" component="div" className="text-danger" />
                                                     </div>

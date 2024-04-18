@@ -4,14 +4,17 @@ import { faExclamationTriangle, faIndianRupeeSign } from '@fortawesome/free-soli
 import PackagesPlaneModel from '../components/PackagesPlaneModel';
 import axios from 'axios';
 import { App_host } from '../Data';
+import PackagesModel from '../components/PackagesModel';
 
 const NewPackages = () => {
     const [showPackages, setShowPackages] = useState(false)
     const [packageDays, setPackagesDays] = useState(0)
     const [toDay, setToDays] = useState(0)
     const [remainingDays, SetRemainingDays] = useState(0)
+    const [showUpdatePackage, showUpdatePackages] = useState(false);
     const [activePackage, setActivePackage] = useState({});
     const [lastDate, setLastDate] = useState(0);
+    const [isCustom, setIscustom] = useState(false)
 
     let user = JSON.parse(localStorage.getItem('user'))
     let token = localStorage.getItem('token')
@@ -22,14 +25,14 @@ const NewPackages = () => {
         setShowPackages(!showPackages)
     }
     function getLastDayOfMonth() {
-        const now = new Date(); 
+        const now = new Date();
         const year = now.getFullYear();
-        const month = now.getMonth(); 
-        const lastDay = new Date(year, month + 1, 0); 
-        const monthName = lastDay.toLocaleString('default', { month: 'short' }); 
-        const dayOfMonth = lastDay.getDate(); 
+        const month = now.getMonth();
+        const lastDay = new Date(year, month + 1, 0);
+        const monthName = lastDay.toLocaleString('default', { month: 'short' });
+        const dayOfMonth = lastDay.getDate();
         const formattedDate = `${monthName} ${dayOfMonth}, ${year}`; // e.g., "Dec 30, 2024"
-        setLastDate(formattedDate) 
+        setLastDate(formattedDate)
     }
     let filterDates = () => {
         const today = new Date();
@@ -46,6 +49,14 @@ const NewPackages = () => {
         getLastDayOfMonth()
     }, []);
 
+    const HandleSHowUpdatePackageModel = () => {
+        setIscustom(false)
+        showUpdatePackages(!showUpdatePackage)
+    }
+    const HandleSHowUpdatePackageModelCustom = () => {
+        setIscustom(true)
+        showUpdatePackages(!showUpdatePackage)
+    }
 
     const getActivePackage = async () => {
         try {
@@ -71,7 +82,13 @@ const NewPackages = () => {
     return (
         <>
             <div className="container-xxl flex-grow-1 container-p-y p-0">
+
                 <div className="container">
+                    <div className='d-flex justify-content-end mb-3'>
+                        <button className="btn btn-primary me-2 mt-2 pointer" onClick={HandleSHowUpdatePackageModel}>Add Package</button>
+                        <button className="btn btn-primary me-2 mt-2 pointer" onClick={HandleSHowUpdatePackageModelCustom}>Add Custom Package</button>
+                    </div>
+                    <PackagesModel HandleSHowUpdatePackageModel={HandleSHowUpdatePackageModel} showUpdatePackage={showUpdatePackage} type={isCustom ? "custom" : null} />
                     <div class="row">
                         <div class="col-md-12">
                             <div className="card mb-4">
@@ -111,7 +128,7 @@ const NewPackages = () => {
                                             </div>
                                         </div>
                                         <div className="col-12">
-                                            <button className="btn btn-primary me-2 mt-2 pointer" onClick={handleShowpackageModel}>{user.isJimAdmin ? "check Offers":"Upgrade Plan"}</button>
+                                            <button className="btn btn-primary me-2 mt-2 pointer" onClick={handleShowpackageModel}>{user.isJimAdmin ? "check Offers" : "Upgrade Plan"}</button>
                                             {/* <button className="btn btn-label-danger cancel-subscription mt-2">Cancel Subscription</button> */}
                                         </div>
                                     </div>

@@ -62,10 +62,7 @@ const AdminPackages = () => {
     useEffect(() => {
         getActivePackage()
     }, [])
-
-    useEffect(() => {
-        getActivePackage()
-    }, []);
+    
     const HandleSHowUpdatePackageModel=()=>{
         showUpdatePackages(!showUpdatePackage)
     }

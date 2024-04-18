@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../components/Table';
 import axios from 'axios';
+import { App_host } from '../Data';
 
 const GymUsers = () => {
     const [userData, setUserData] = useState([]);
@@ -14,7 +15,7 @@ const GymUsers = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/v1/user/getAllBusinessUser`, {
+            const response = await axios.get(`${App_host}/user/getAllBusinessUser`, {
                 params: {
                     page,
                     limit,
@@ -91,7 +92,7 @@ const GymUsers = () => {
                             </div>
                         </div>
                     </div>
-                    <Table data={userData} pagination={pagination} onPageChange={handlePageChange}  reloadUsers={fetchUsers}/>
+                    <Table data={userData} pagination={pagination} onPageChange={handlePageChange}  reloadUsers={fetchUsers} type={"admin"}/>
                 </div>
             </div>
         </div>

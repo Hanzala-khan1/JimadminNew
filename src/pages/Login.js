@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { App_host } from "../Data";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,11 +23,16 @@ const Login = () => {
 
   const handleLogin = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.post('http://localhost:8000/v1/user/loginUser', values);
+      const response = await axios.post(`${App_host}/user/loginUser`, values);
       const { data } = response;
-      
+
       console.log("token", data.data.token);
       localStorage.setItem("user", JSON.stringify(data.data.info));
+      if (!data.data.info.isAdmin) {
+        let Gym = data.data.info?.BusinessLocation[0]?.Gym
+        localStorage.setItem("activegym", data.data.info?.BusinessLocation[0]?.Gym?._id.toString())
+        localStorage.setItem("gymDetail", JSON.stringify(Gym))
+      }
       localStorage.setItem("token", data.data.token);
 
       const { isAdmin, isJimAdmin } = data.data.info;
@@ -39,17 +45,17 @@ const Login = () => {
       }
 
       // if (data?.success) {
-        toast.success('Login Successfully', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
+      toast.success('Login Successfully', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       // }
       // navigate("/")
       window.location.reload();
@@ -76,7 +82,7 @@ const Login = () => {
     <>
       <div className="login-container">
         <div className="left-content d-none d-sm-flex justify-content-center">
-          <div className="left-content-inner">
+          {/* <div className="left-content-inner">
             <h3 className="flexFlow">
               Flex flow:
               <span className="flexText">
@@ -84,17 +90,17 @@ const Login = () => {
                 Our Comprehensive Gym Network and User-Friendly Platform
               </span>
             </h3>
-          </div>
+          </div> */}
         </div>
 
-        <div className="right-content">
-          <div className="right-content-inner">
+        <div className="right-content row">
+          <div className="right-content-inner row" >
             <div className="logimg">
-              <img src={logo} alt="Logo" />
-              <div id="logtext">
+              {/* <img src={logo} alt="Logo" /> */}
+              {/* <div id="logtext" >
                 Securely log in to your account for personalized access and
                 services.
-              </div>
+              </div> */}
             </div>
             <Formik
               initialValues={initialValues}

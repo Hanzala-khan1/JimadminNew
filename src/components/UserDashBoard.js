@@ -4,6 +4,7 @@ import { faUsers, faChartPie } from '@fortawesome/free-solid-svg-icons';
 import PeakHoursChart from './shared/PeakHoursChart';
 import axios from 'axios';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { App_host } from '../Data';
 
 const UserDashBoard = () => {
     const [currentTime, setCurrentTime] = useState('00:00:00');
@@ -13,18 +14,21 @@ const UserDashBoard = () => {
     const [totalUser, settotalUser] = useState(0);
     const [timerInterval, setTimerInterval] = useState(null);
 
+
+    let user =JSON.parse(localStorage.getItem("user"))
     const token = localStorage.getItem('token');
+    const activegym = localStorage.getItem('activegym');
 
     const getAttendance = async () => {
         try {
 
-            const response = await axios.get('http://localhost:8000/v1/attendence/getAttendence', {
+            const response = await axios.get(`${App_host}/attendence/getAttendence?jimId=${activegym}`, {
                 headers: {
                     token: token
                 }
             });
 
-            const attendanceData = response.data.data;
+            const attendanceData = response?.data?.data;
             console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", attendanceData)
             if (attendanceData) {
                 const { status, total_mint_spend } = attendanceData;
@@ -34,7 +38,7 @@ const UserDashBoard = () => {
                 } else
                     if (status === "punchOut") {
                         setIsPunchedOut(true);
-                        setIsPunchedIn(true);
+                        setIsPunchedIn(false);
                         setCurrentTime(formatTimeFromSeconds(total_mint_spend));
                     }
             } else {
@@ -55,9 +59,8 @@ const UserDashBoard = () => {
         const intervalId = setInterval(() => {
             const hours = Math.floor(timeInSeconds / 3600);
             const minutes = Math.floor((timeInSeconds % 3600) / 60);
-            const seconds = timeInSeconds % 60;
-
-            const formattedTime = `${formatTimeComponent(hours)}:${formatTimeComponent(minutes)}:${formatTimeComponent(seconds)}`;
+            const seconds = (timeInSeconds % 60 );
+            const formattedTime = `${formatTimeComponent(hours.toFixed())}:${formatTimeComponent(minutes.toFixed())}:${formatTimeComponent(seconds.toFixed())}`;
             setCurrentTime(formattedTime);
 
             timeInSeconds++;
@@ -74,7 +77,7 @@ const UserDashBoard = () => {
     };
     const handleAttendanceAction = async () => {
         try {
-            const markAttendance = await axios.post("http://localhost:8000/v1/attendence/addUpdateAttendence", {}, {
+            const markAttendance = await axios.post(`${App_host}/attendence/addUpdateAttendence?jimId=${activegym}`, {}, {
                 headers: {
                     token: token
                 }
@@ -84,8 +87,7 @@ const UserDashBoard = () => {
 
             if (attendanceData.status === "punchIn") {
                 setIsPunchedIn(true);
-                setCurrentTime('00:00:00');
-                startTimer(0);
+                startTimer(attendanceData.total_mint_spend>0?attendanceData.total_mint_spend:0);
                 toast.success('check In secussfully', {
                     position: "top-right",
                     autoClose: 5000,
@@ -100,7 +102,7 @@ const UserDashBoard = () => {
             } else if (attendanceData.status === "punchOut") {
 
                 setIsPunchedOut(true);
-                setIsPunchedIn(true);
+                setIsPunchedIn(false);
                 const totalSecondsSpent = attendanceData.total_mint_spend;
 
                 setCurrentTime(formatTimeFromSeconds(totalSecondsSpent));
@@ -131,7 +133,7 @@ const UserDashBoard = () => {
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
 
-        return `${formatTimeComponent(hours)}:${formatTimeComponent(minutes)}:${formatTimeComponent(seconds)}`;
+        return `${formatTimeComponent(hours.toFixed())}:${formatTimeComponent(minutes.toFixed())}:${formatTimeComponent(seconds.toFixed())}`;
     };
 
     const formatTimeComponent = (value) => {
@@ -139,7 +141,7 @@ const UserDashBoard = () => {
     };
 
     let getActiveUser = async () => {
-        const activeuser = await axios.get(`http://localhost:8000/v1/attendence/getActiveUser`, {
+        const activeuser = await axios.get(`${App_host}/attendence/getActiveUser?jimId=${activegym}`, {
             headers: {
                 token: token
             }
@@ -172,10 +174,9 @@ const UserDashBoard = () => {
                                 <div className="d-flex align-items-end row">
                                     <div className="col-7">
                                         <div className="card-body text-nowrap">
-                                            <h5 className="card-title mb-0">Welcome John! 💪</h5>
-                                            <p>Current Package: Gold</p>
+                                            <h5 className="card-title mb-0">Welcome {user?.full_name}</h5>
                                             <p>Current Time: {currentTime}</p>
-                                            <button className="btn btn-primary" onClick={handleAttendanceAction} disabled={isPunchedOut}>
+                                            <button className="btn btn-primary" onClick={handleAttendanceAction}>
                                                 {isPunchedIn ? 'Check-out' : 'Check-in'}
                                             </button>
                                         </div>

@@ -8,6 +8,9 @@ import AllMember from './pages/AllMember';
 import NewRequest from './pages/NewRequest';
 import AddnewMember from './pages/AddnewMember';
 import NewGymRequests from './pages/NewGymRequests';
+import NewPackages from './pages/NewPackages';
+import UpgradePackage from './pages/UpgradePackage';
+import AdminPackages from './pages/AdminPackages';
 
 // Lazy-loaded components
 const DashBoard = React.lazy(() => import('./pages/DashBoard'));
@@ -24,7 +27,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = JSON.parse(localStorage.getItem('user'));
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
 
@@ -69,6 +72,9 @@ function AuthenticatedApp() {
         <Route path="/earning" element={<Earning />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/packages" element={<Packages />} />
+        <Route path="/newpackages" element={<NewPackages />} />
+        <Route path="/admin-packages" element={<AdminPackages />} />
+        <Route path="/checkoutPackage" element={<UpgradePackage />} />
         <Route path="/earning" element={<Earning />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

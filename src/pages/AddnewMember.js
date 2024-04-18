@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 import { useLocation } from 'react-router-dom';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { App_host } from '../Data';
 
 const RegisterUserSchema = Yup.object().shape({
     full_name: Yup.string().required('Full Name is required!'),
@@ -12,6 +13,7 @@ const RegisterUserSchema = Yup.object().shape({
     password: Yup.string().min(6, 'Password must be at least 6 characters!').required('Password is required!'),
     phone: Yup.string().matches(/^\d+$/, 'Invalid phone number'),
     city: Yup.string().required('City is required!'),
+    package: Yup.string().required('Package is required!'),
     description: Yup.string(),
     images: Yup.array().notRequired().max(3, 'Maximum of 3 images allowed'),
 });
@@ -19,12 +21,18 @@ const RegisterUserSchema = Yup.object().shape({
 const AddnewMember = () => {
     const [showPassword, setShowPassword] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"))
+    const [packagesData, SetPackagesData] = useState([]);
+    const [filterPackages, setFilterPackages] = useState(user.isJimAdmin ? "mypackages" : null);
+    
+    const activegym = localStorage.getItem("activegym")
+    let token = localStorage.getItem('token')
+
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
             await RegisterUserSchema.validate(values, { abortEarly: false });
 
-            values["BusinessLocation"] = user.BusinessLocation[0]._id.toString()
+            values["BusinessLocation"] = activegym
             values["status"] = "active"
 
             const formData = new FormData();
@@ -38,7 +46,7 @@ const AddnewMember = () => {
                 }
             });
 
-            const response = await axios.post('http://localhost:8000/v1/user/addUser', formData, {
+            const response = await axios.post(`${App_host}/user/addUser`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -88,6 +96,42 @@ const AddnewMember = () => {
             setSubmitting(false);
         }
     };
+
+    let params = {
+        page: 1,
+        limit: 20,
+    }
+    if (user.isAdmin) {
+        params['is_admin_package'] = true
+    } else if (user.isJimAdmin || !user.isJimAdmin) {
+        params['is_jim_package'] = true
+        params['BusinessLocation'] = activegym
+        params['is_admin_package'] = false
+        if (filterPackages == "adminpackages") {
+            params['is_admin_package'] = true
+            params['is_jim_package'] = false
+            params['BusinessLocation'] = null
+        }
+    }
+
+    const getPackagesList = async () => {
+        try {
+            const response = await axios.get(`${App_host}/packages/getPackages`, {
+                params: params,
+                headers: {
+                    token,
+                },
+            });
+
+            let { results, ...otherPages } = response.data.data
+            SetPackagesData(results);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    }
+    useEffect(() => {
+        getPackagesList()
+    }, [])
 
     return (
         <div className="container-xxl flex-grow-1 container-p-y">
@@ -143,6 +187,30 @@ const AddnewMember = () => {
                                     <div className="col-sm-9">
                                         <Field type="text" name="adress" className="form-control" placeholder="Enter Address Here" />
                                         <ErrorMessage name="adress" component="div" className="text-danger" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label text-sm-end">Package</label>
+                                    <div className="col-sm-9">
+                                        <Field
+                                            as="select"
+                                            name="package"
+                                            className="form-select"
+                                            aria-label="Select Package"
+                                            onChange={(e) => {
+                                                const selectedPackageId = e.target.value;
+                                                setFieldValue("package", selectedPackageId);
+                                            }}
+                                        >
+                                            <option value="">Select Package</option>
+                                            {packagesData.length > 0 &&
+                                                packagesData.map((item) => (
+                                                    <option key={item._id} value={item._id} className='justify-content-between'>
+                                                        {item.name}  -------------- $ {item.price}
+                                                    </option>
+                                                ))}
+                                        </Field>
+                                        <ErrorMessage name="package" component="div" className="error-message" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">

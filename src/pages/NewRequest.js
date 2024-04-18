@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Table from '../components/Table'
 import axios from 'axios'
+import { App_host } from '../Data';
 
 const NewRequest = () => {
     const [userData, setUserData] = useState([]);
@@ -11,16 +12,17 @@ const NewRequest = () => {
 
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
+    const activegym = localStorage.getItem('activegym');
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/v1/user/getAllBusinessUser`, {
+            const response = await axios.get(`${App_host}/user/getAllBusinessUser`, {
                 params: {
                     page,
                     limit,
                     search: search.trim(),
-                    status:"inactive"
-
+                    status:"inactive",
+                    BusinessLocation:activegym
                 },
                 headers: {
                     token,
@@ -55,7 +57,7 @@ const NewRequest = () => {
     return (
         <div className="container-xxl flex-grow-1 container-p-y">
             <div className="card">
-                <h5 className="card-header">All {user?.BusinessLocation[0]?.name} Member</h5>
+                <h5 className="card-header">All {user?.BusinessLocation[0]?.Gym?.name} Member</h5>
                 <div className="card-datatable table-responsive">
                     <div className="row">
                         <div className="col-sm-12 col-md-6">

@@ -1,14 +1,23 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { App_host } from '../Data';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClockRotateLeft, faCoins, faCubes, faHourglassHalf, faIndianRupeeSign, faUserClock } from '@fortawesome/free-solid-svg-icons';
 
 const JimAdminDashboard = () => {
     const [activeUser, setActiveUser] = useState(0);
     const [totalUser, settotalUser] = useState(0);
+    const [dashBoardData,setDashboardData]=useState()
 
     const token = localStorage.getItem('token');
-let user =JSON.parse(localStorage.getItem("user"))
+    const activegym = localStorage.getItem("activegym")
+
+    let user = JSON.parse(localStorage.getItem("user"))
     let getActiveUser = async () => {
-        const activeuser = await axios.get(`http://localhost:8000/v1/attendence/getActiveUser`, {
+        const activeuser = await axios.get(`${App_host}/attendence/getActiveUser`, {
+            params: {
+                jimId: activegym
+            },
             headers: {
                 token: token
             }
@@ -19,9 +28,24 @@ let user =JSON.parse(localStorage.getItem("user"))
             setActiveUser(activeuser.data.data.active_users)
         }
     }
+    
+    const getPackagesList = async () => {
+        try {
+            const response = await axios.get(`${App_host}/earning/getDashboardDetails`, {
+                headers: {
+                    token,
+                },
+            });
+            setDashboardData(response.data.data);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    }
+
 
     useEffect(() => {
         getActiveUser();
+        getPackagesList()
 
     }, []);
 
@@ -63,8 +87,9 @@ let user =JSON.parse(localStorage.getItem("user"))
                                     <div className="row gy-3">
                                         <div className="col-md-6 col-6">
                                             <div className="d-flex align-items-center">
-                                                <div className="badge rounded-pill bg-label-primary me-3 p-2"><i
-                                                    className="ti ti-chart-pie-2 ti-sm"></i></div>
+                                                <div className="badge rounded-pill bg-label-primary me-3 p-2">
+                                                <FontAwesomeIcon icon={faClockRotateLeft} />
+                                                    </div>
                                                 <div className="card-info">
                                                     <h5 className="mb-0">{activeUser}</h5>
                                                     <small>Active Users</small>
@@ -91,9 +116,10 @@ let user =JSON.parse(localStorage.getItem("user"))
                                     <div className="card-body">
                                         <div className="d-flex align-items-center mb-2 pb-1">
                                             <div className="avatar me-2">
-                                                <span className="avatar-initial rounded bg-label-primary"><i className="ti ti-truck ti-md"></i></span>
+                                                <span className="avatar-initial rounded bg-label-primary">
+                                                    <FontAwesomeIcon icon={faUserClock} />                                                    </span>
                                             </div>
-                                            <h4 className="ms-1 mb-0">2</h4>
+                                            <h4 className="ms-1 mb-0">{dashBoardData?.newRequest}</h4>
                                         </div>
                                         <p className="mb-1">New Requests</p>
 
@@ -105,12 +131,13 @@ let user =JSON.parse(localStorage.getItem("user"))
                                     <div className="card-body">
                                         <div className="d-flex align-items-center mb-2 pb-1">
                                             <div className="avatar me-2">
-                                                <span className="avatar-initial rounded bg-label-warning"><i
-                                                    className='ti ti-alert-triangle ti-md'></i></span>
+                                                <span className="avatar-initial rounded bg-label-warning">
+                                                    <FontAwesomeIcon icon={faCoins} />
+                                                </span>
                                             </div>
-                                            <h4 className="ms-1 mb-0">800$</h4>
+                                            <h4 className="ms-1 mb-0"> <FontAwesomeIcon icon={faIndianRupeeSign} /> {dashBoardData?.monthlyEarning}</h4>
                                         </div>
-                                        <p className="mb-1">Total Earnings</p>
+                                        <p className="mb-1">Monthly Earnings</p>
 
                                     </div>
                                 </div>
@@ -120,10 +147,11 @@ let user =JSON.parse(localStorage.getItem("user"))
                                     <div className="card-body">
                                         <div className="d-flex align-items-center mb-2 pb-1">
                                             <div className="avatar me-2">
-                                                <span className="avatar-initial rounded bg-label-danger"><i
-                                                    className='ti ti-git-fork ti-md'></i></span>
+                                                <span className="avatar-initial rounded bg-label-danger">
+                                                    <FontAwesomeIcon icon={faHourglassHalf} />
+                                                </span>
                                             </div>
-                                            <h4 className="ms-1 mb-0">270$</h4>
+                                            <h4 className="ms-1 mb-0"><FontAwesomeIcon icon={faIndianRupeeSign} /> {dashBoardData?.monthlyPending}</h4>
                                         </div>
                                         <p className="mb-1">Pending Payments</p>
 
@@ -135,9 +163,12 @@ let user =JSON.parse(localStorage.getItem("user"))
                                     <div className="card-body">
                                         <div className="d-flex align-items-center mb-2 pb-1">
                                             <div className="avatar me-2">
-                                                <span className="avatar-initial rounded bg-label-info"><i className='ti ti-clock ti-md'></i></span>
+                                                <span className="avatar-initial rounded bg-label-info">
+                                                    <FontAwesomeIcon icon={faCubes} />
+                                                </span>
                                             </div>
-                                            <h4 className="ms-1 mb-0">4</h4>
+
+                                            <h4 className="ms-1 mb-0">{dashBoardData?.TotalPackages}</h4>
                                         </div>
                                         <p className="mb-1">Total Packages</p>
 

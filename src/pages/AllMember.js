@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../components/Table';
 import axios from 'axios';
+import { App_host } from '../Data';
 
 const AllMember = () => {
     const [userData, setUserData] = useState([]);
@@ -11,15 +12,18 @@ const AllMember = () => {
 
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
+    let activegym = localStorage.getItem('activegym')
+
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/v1/user/getAllBusinessUser`, {
+            const response = await axios.get(`${App_host}/user/getAllBusinessUser`, {
                 params: {
                     page,
                     limit,
                     search: search.trim(),
-                    status:"active"
+                    status:"active",
+                    BusinessLocation:activegym
                 },
                 headers: {
                     token,

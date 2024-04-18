@@ -1,17 +1,23 @@
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { App_host } from '../Data';
+import UserDetails from './UserDetail';
 
 const Table = ({ data, pagination, onPageChange, reloadUsers, type }) => {
     const { page, totalPages } = pagination;
     let token = localStorage.getItem("token")
+    const [showDetails, setShowDetails] = useState()
+    const [detailsData, setDetailsData] = useState()
     let HandleUpdateUser = async (status, id) => {
         try {
+            console.log("idididiidididididididid", id)
+            // return
             let changestatus = status === "active" ? "inactive" : "active"
             console.log("insode the app ")
-            const response = await axios.put(`http://localhost:8000/v1/user/updateUser`, {
+            const response = await axios.put(`${App_host}/user/updateUserStatus`, {
                 status: changestatus,
                 id: id
             },
@@ -62,6 +68,64 @@ const Table = ({ data, pagination, onPageChange, reloadUsers, type }) => {
                 transition: Bounce,
             });
         }
+    }
+    let HandledeteUser = async (id) => {
+        try {
+            const response = await axios.put(`${App_host}/user/deleteUser`, {
+                id: id
+            },
+                {
+                    headers: {
+                        token,
+                    },
+                });
+            console.log("also got the response ", response)
+
+            if (response?.data?.success) {
+                toast.success('User registered successfully!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                });
+                reloadUsers()
+            } else {
+                toast.error("An Error Occured ", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                });
+            }
+        } catch (error) {
+            console.log("error.response.data.message", error)
+            toast.error(error?.response?.data?.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        }
+    }
+
+    let handleShowDeatils = (data = null) => {
+        setDetailsData(data)
+        setShowDetails(!showDetails)
     }
 
     const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
@@ -117,14 +181,18 @@ const Table = ({ data, pagination, onPageChange, reloadUsers, type }) => {
                             rowSpan="1" colSpan="1" style={{ width: "90px" }}
                             aria-label="Status: aktivieren, um Spalte aufsteigend zu sortieren">
                             Payment</th>
-                        <th className="sorting_disabled" rowSpan="1" colSpan="1"
-                            style={{ width: "65px" }} aria-label="Actions">Actions</th>
+                        {
+                            type !== "admin" ? (
+                                <th className="sorting_disabled" rowSpan="1" colSpan="1"
+                                    style={{ width: "65px" }} aria-label="Actions">Actions</th>) : ('')}
                     </tr>
                 </thead>
                 <tbody>
                     {data.length > 0 ? (
                         <>
                             {data.map((user) => {
+                                { console.log("---------------------------------------", user) }
+
                                 return (
                                     <tr className="odd">
                                         <td className="control sorting_1 dtr-hidden" tabIndex="0"
@@ -146,24 +214,36 @@ const Table = ({ data, pagination, onPageChange, reloadUsers, type }) => {
                                         }
                                         <td className="" style={{}}>{user.created_at}</td>
                                         <td className="" style={{}}><span
-                                            className="badge  bg-label-success">{user.status}</span></td>
-                                        <td className="" style={{}}><span
-                                            className="badge  bg-label-danger">{user.payment_status ? user.payment_status : "paid"}</span></td>
+                                            className="badge" style={{
+                                                backgroundColor: user.status == "active" ? "green" : "red"
+                                            }}>{user.status == "active" ? "active" : "pending"}</span></td>
+                                        <td
+                                            className=""
+                                            style={{}}><span
+                                                className="badge  bg-label-danger" style={{
+                                                    backgroundColor: user.payment_status == "paid" ? "green" : "red"
+                                                }}>{user.payment_status ? user.payment_status : "paid"}</span></td>
                                         <td className="" style={{}}>
-                                            <div className="d-inline-block"><a href="javascript:;"
-                                                className="btn btn-sm btn-icon dropdown-toggle hide-arrow"
-                                                data-bs-toggle="dropdown"><i
-                                                    className="text-primary ti ti-dots-vertical"></i></a>
-                                                <div className="dropdown-menu dropdown-menu-end m-0"><a
-                                                    href="javascript:;" className="dropdown-item" onClick={() => HandleUpdateUser(user.status, user._id.toString())}>{user.status == "active" ? "inactive" : "active"}</a>
-                                                    <div className="dropdown-divider"></div><a href="javascript:;"
-                                                        className="dropdown-item text-danger delete-record" >Delete</a>
-                                                </div>
-                                            </div>
-                                            {/* <a href="javascript:;"
-                                                className="btn btn-sm btn-icon item-edit">
-                                                <FontAwesomeIcon icon={faPencilAlt} />
-                                            </a> */}
+                                            {
+                                                type !== "admin" ? (
+                                                    <div className="d-inline-block">
+                                                        <a href="javascript:;"
+                                                            className="btn btn-sm btn-icon dropdown-toggle hide-arrow"
+                                                            data-bs-toggle="dropdown">
+                                                            <i className="text-primary ti ti-dots-vertical"></i>
+                                                        </a>
+                                                        <div className="dropdown-menu dropdown-menu-end m-0">
+                                                            <a className="dropdown-item" onClick={() => HandleUpdateUser(user.status, type === "jim" ? (user.Owner.toString()) : (user._id.toString()))}>{user.status == "active" ? "inactive" : "Approve"}</a>
+                                                            <div className="dropdown-divider"></div>
+                                                            <a className="dropdown-item" onClick={() => handleShowDeatils(user)}>Details</a>
+                                                            <div className="dropdown-divider"></div>
+                                                            <a className="dropdown-item text-danger delete-record" onClick={() => HandledeteUser(type === "jim" ? (user.Owner.toString()) : (user._id.toString()))}>Delete</a>
+
+
+                                                        </div>
+                                                    </div>) : (
+
+                                                    <></>)}
                                         </td>
                                     </tr>)
                             })}
@@ -177,7 +257,7 @@ const Table = ({ data, pagination, onPageChange, reloadUsers, type }) => {
                     )}
                 </tbody>
             </table>
-
+            <UserDetails showDetails={showDetails} handleShowDeatils={handleShowDeatils} Data={detailsData} type={type=="jim"?"jim":"user"}/>
             <nav>
                 <ul className="pagination">
                     <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>

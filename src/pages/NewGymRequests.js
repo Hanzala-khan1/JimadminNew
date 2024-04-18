@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Table from '../components/Table'
 import axios from 'axios'
 import { useLocation } from 'react-router-dom';
+import { App_host } from '../Data';
 
 const NewGymRequests = () => {
 
@@ -18,7 +19,7 @@ const NewGymRequests = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/v1/Jim/getAllBusinessLocation`, {
+            const response = await axios.get(`${App_host}/Jim/getAllBusinessLocation`, {
                 params: {
                     page,
                     limit,

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { json, useNavigate } from 'react-router-dom';
 
-const TopNav = () => {
+const TopNav = ({handleShowNav}) => {
     const [topNavHeading, setTopNavHeading] = useState('');
+    const gymDetail = JSON.parse(localStorage.getItem('gymDetail'));
     const user = JSON.parse(localStorage.getItem('user'));
+    const role = localStorage.getItem('role');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -11,9 +13,9 @@ const TopNav = () => {
             if (user.isAdmin) {
                 setTopNavHeading('Super Admin Panel');
             } else if (user.isJimAdmin) {
-                setTopNavHeading(user.BusinessLocation[0].name);
+                setTopNavHeading(gymDetail.name);
             } else {
-                setTopNavHeading(user.full_name);
+                setTopNavHeading(gymDetail.name);
             }
         }
     }, [user]); 
@@ -23,12 +25,13 @@ const TopNav = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('role');
         localStorage.removeItem('token');
+        localStorage.removeItem('activegym');
         window.location.reload();
     };
     return (
         <>
             <nav className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
-                <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none" onClick={handleShowNav}>
                     <a className="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
                         <i className="ti ti-menu-2 ti-sm"></i>
                     </a>
@@ -247,7 +250,7 @@ const TopNav = () => {
                         <li className="nav-item navbar-dropdown dropdown-user dropdown">
                             <a className="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                 <div className="avatar avatar-online">
-                                    <img src="../assets/img/avatars/1.png" alt className="h-auto rounded-circle" />
+                                    <img src={user.images} alt className="h-70 rounded-circle" />
                                 </div>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -256,12 +259,12 @@ const TopNav = () => {
                                         <div class="d-flex">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar avatar-online">
-                                                    <img src="../assets/img/avatars/1.png" alt class="h-auto rounded-circle" />
+                                                <img src={user.images} alt className="h-70 rounded-circle" />
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <span class="fw-medium d-block">John Doe</span>
-                                                <small class="text-muted">Gym Admin</small>
+                                                <span class="fw-medium d-block">{user.full_name}</span>
+                                                <small class="text-muted">{role=="jimAdmin"? "jim Admin":role}</small>
                                             </div>
                                         </div>
                                     </a>

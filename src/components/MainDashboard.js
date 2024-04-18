@@ -1,6 +1,30 @@
-import React from 'react'
+import { faCoins, faHourglassHalf, faIndianRupeeSign, faUserClock } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { useEffect, useState } from 'react'
+import { App_host } from '../Data'
+import axios from 'axios'
 
 const MainDashboard = () => {
+const [dashBoardData,setDashboardData]=useState()
+    let token = localStorage.getItem("token")
+    const getPackagesList = async () => {
+        try {
+            const response = await axios.get(`${App_host}/earning/getDashboardDetails`, {
+                headers: {
+                    token,
+                },
+            });
+            setDashboardData(response.data.data);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    }
+    useEffect(() => {
+        getPackagesList()
+    }, [])
+
+    console.log("dashBoardData,dashBoardData",dashBoardData)
+
     return (
         <div>
             <div className="content-wrapper">
@@ -12,59 +36,51 @@ const MainDashboard = () => {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-sm-6 col-lg-3 mb-4 ">
+                            <div className="col-sm-6 col-lg-4 mb-4 ">
                                 <div className="card card-border-shadow-primary ">
                                     <div className="card-body">
                                         <div className="d-flex align-items-center mb-2 pb-1">
                                             <div className="avatar me-2">
-                                                <span className="avatar-initial rounded bg-label-primary"><i className="ti ti-truck ti-md"></i></span>
+                                                <span className="avatar-initial rounded bg-label-primary">
+                                                <FontAwesomeIcon icon={faUserClock} />                                                
+                                                    </span>
                                             </div>
-                                            <h4 className="ms-1 mb-0">2</h4>
+                                            <h4 className="ms-1 mb-0">{dashBoardData?.newRequest}</h4>
                                         </div>
                                         <p className="mb-1">New Gym Requests</p>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-sm-6 col-lg-3 mb-4 ">
+                            <div className="col-sm-6 col-lg-4 mb-4 ">
                                 <div className="card card-border-shadow-warning ">
                                     <div className="card-body">
                                         <div className="d-flex align-items-center mb-2 pb-1">
                                             <div className="avatar me-2">
-                                                <span className="avatar-initial rounded bg-label-warning"><i
-                                                    className='ti ti-alert-triangle ti-md'></i></span>
+                                                <span className="avatar-initial rounded bg-label-warning">
+                                                <FontAwesomeIcon icon={faCoins} />
+
+                                                    </span>
                                             </div>
-                                            <h4 className="ms-1 mb-0">800$</h4>
+                                            <h4 className="ms-1 mb-0"><FontAwesomeIcon icon={faIndianRupeeSign} /> {dashBoardData?.monthlyEarning}</h4>
                                         </div>
-                                        <p className="mb-1">Total Earnings</p>
+                                        <p className="mb-1">Monthly Earnings</p>
 
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-sm-6 col-lg-3 mb-4 ">
+                            <div className="col-sm-6 col-lg-4 mb-4 ">
                                 <div className="card card-border-shadow-danger ">
                                     <div className="card-body">
                                         <div className="d-flex align-items-center mb-2 pb-1">
                                             <div className="avatar me-2">
-                                                <span className="avatar-initial rounded bg-label-danger"><i
-                                                    className='ti ti-git-fork ti-md'></i></span>
+                                                <span className="avatar-initial rounded bg-label-danger">
+                                                <FontAwesomeIcon icon={faHourglassHalf} />
+
+                                                    </span>
                                             </div>
-                                            <h4 className="ms-1 mb-0">270$</h4>
+                                            <h4 className="ms-1 mb-0"><FontAwesomeIcon icon={faIndianRupeeSign} /> {dashBoardData?.monthlyPending}</h4>
                                         </div>
                                         <p className="mb-1">Pending Payments</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-sm-6 col-lg-3 mb-4 ">
-                                <div className="card card-border-shadow-info ">
-                                    <div className="card-body">
-                                        <div className="d-flex align-items-center mb-2 pb-1">
-                                            <div className="avatar me-2">
-                                                <span className="avatar-initial rounded bg-label-info"><i className='ti ti-clock ti-md'></i></span>
-                                            </div>
-                                            <h4 className="ms-1 mb-0">4</h4>
-                                        </div>
-                                        <p className="mb-1">Total Packages</p>
 
                                     </div>
                                 </div>

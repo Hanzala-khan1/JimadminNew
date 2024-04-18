@@ -3,17 +3,27 @@ import { Link } from 'react-router-dom';
 import { faFaceFrown, faMapMarker } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
+import { App_host } from '../Data';
+import GymsPopup from '../components/GymsPopup';
 
 const Otherjims = () => {
     const [jim, setJim] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [nearby, setNearby] = useState(false);
+    const [gymId, setGymId] = useState("");
     const itemsPerPage = 12;
 
+    const [showPackages, setShowPackages] = useState(false)
+
+    let handleShowpackageModel = (id) => {
+        setGymId(id)
+        setShowPackages(!showPackages)
+    }
     useEffect(() => {
         const fetchJim = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/v1/Jim/getAllBusinessLocation?page=${currentPage}&limit=${itemsPerPage}`);
+                const response = await axios.get(`${App_host}/Jim/getAllBusinessLocation?page=${currentPage}&limit=${itemsPerPage}`);
                 setJim(response.data.data.results);
                 setTotalPages(response.data.data.totalPages);
             } catch (error) {
@@ -27,6 +37,9 @@ const Otherjims = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+    const handleCheckboxChange = (event) => {
+        setNearby(event.target.checked);
+    };
 
     return (
         <div>
@@ -39,34 +52,48 @@ const Otherjims = () => {
                             </div>
                         </div>
                     </div>
+                    {/* <div className="row justify-content-between py-3 border-1">
+                        <button className="btn btn-primary col-5">request for custom Package</button>
+                        <div class="custom-control custom-switch col-3">
+                            <label class="switch">
+                                <input type="checkbox" />
+                                <span class="slider round"></span>
+                            </label>
+                            <label class="">
+                                nearby Gyms
+                            </label>
+                        </div>
+                    </div> */}
                     <div className="row">
                         {jim.map((data, index) => (
-                            <div key={index} className="col-lg-3 col-md-6 col-sm-6 mb-4">
-                                <div className="card h-100">
-                                    {data.images.length > 0 ? (
-                                        <img
-                                            src={data.images[0]}
-                                            className="card-img-top"
-                                            alt="Gym"
-                                            style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                                        />
-                                    ):(
-                                        <img
-                                        src="https://www.staticwhich.co.uk/static/images/products/no-image/no-image-available.png"
-                                        className="card-img-top"
-                                        alt="Gym"
-                                        style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                                    />
-                                    )}
-                                    <div className="card-body">
-                                        <h5 className="card-title">{data.name}</h5>
-                                        <p className="card-text">
-                                            <i><FontAwesomeIcon icon={faMapMarker} /></i> {data.adress}
-                                        </p>
-                                        <Link to={`/Details?id=${data._id}`} className="btn btn-primary">Register Now</Link>
+                            <>
+                                <div key={index} className="col-lg-3 col-md-6 col-sm-6 mb-4">
+                                    <div className="card h-100">
+                                        {data.images.length > 0 ? (
+                                            <img
+                                                src={data.images[0]}
+                                                className="card-img-top"
+                                                alt="Gym"
+                                                style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                                            />
+                                        ) : (
+                                            <img
+                                                src="https://www.staticwhich.co.uk/static/images/products/no-image/no-image-available.png"
+                                                className="card-img-top"
+                                                alt="Gym"
+                                                style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                                            />
+                                        )}
+                                        <div className="card-body">
+                                            <h5 className="card-title">{data.name}</h5>
+                                            <p className="card-text">
+                                                <i><FontAwesomeIcon icon={faMapMarker} /></i> {data.adress}
+                                            </p>
+                                            <button className="btn btn-primary" onClick={() => handleShowpackageModel(data._id.toString())}>Register Now</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </>
                         ))}
                         {jim.length === 0 && (
                             <div className="col-12 d-flex justify-content-center">
@@ -79,6 +106,9 @@ const Otherjims = () => {
                             </div>
                         )}
                     </div>
+                    {
+                        showPackages && <GymsPopup showPackages={showPackages} handleShowpackage={handleShowpackageModel} gymid={gymId} />
+                    }
                     {totalPages > 1 && (
                         <div className="row mt-4">
                             <div className="col-lg-12 d-flex justify-content-center">

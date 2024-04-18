@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 import { useLocation } from 'react-router-dom';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { App_host } from '../Data';
 
 const RegisterGymSchema = Yup.object().shape({
     full_name: Yup.string().required('Full Name is required !'),
@@ -15,12 +16,17 @@ const RegisterGymSchema = Yup.object().shape({
     phone: Yup.string().matches(/^\d+$/, 'Invalid phone number !'),
     city: Yup.string().required('City is required !'),
     description: Yup.string(),
+    package: Yup.string().required('Package is required!'),
     images: Yup.array()
 });
 
 const AddNewJim = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showImages, setShowImages] = useState([]);
+    const [packagesData, SetPackagesData] = useState([]);
+    let user = JSON.parse(localStorage.getItem('user'))
+    const [filterPackages, setFilterPackages] = useState(user.isJimAdmin ? "mypackages" : null);
+
 
 
     const handleSubmit = async (values, formikBag) => {
@@ -44,7 +50,7 @@ const AddNewJim = () => {
                 });
             }
             console.log("-------------------------------", [...formData]);
-            const response = await axios.post('http://localhost:8000/v1/Jim/addJim', formData, {
+            const response = await axios.post(`${App_host}/Jim/addJim`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -94,6 +100,46 @@ const AddNewJim = () => {
             formikBag?.setSubmitting(false);
         }
     };
+
+    const activegym = localStorage.getItem("activegym")
+    let token = localStorage.getItem('token')
+
+    let params = {
+        page: 1,
+        limit: 20,
+    }
+    if (user.isAdmin) {
+        params['is_admin_package'] = true
+    } else if (user.isJimAdmin || !user.isJimAdmin) {
+        params['is_jim_package'] = true
+        params['BusinessLocation'] = activegym
+        params['is_admin_package'] = false
+        if (filterPackages == "adminpackages") {
+            params['is_admin_package'] = true
+            params['is_jim_package'] = false
+            params['BusinessLocation'] = null
+        }
+    }
+
+    const getPackagesList = async () => {
+        try {
+            const response = await axios.get(`${App_host}/packages/getPackages`, {
+                params: params,
+                headers: {
+                    token,
+                },
+            });
+
+            let { results, ...otherPages } = response.data.data
+            SetPackagesData(results);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    }
+    useEffect(() => {
+        getPackagesList()
+    }, [])
+
     return (
         <>
             <div className="container-xxl flex-grow-1 container-p-y">
@@ -110,6 +156,7 @@ const AddNewJim = () => {
                                 gymAddress: '',
                                 phone: '',
                                 city: '',
+                                package:'',
                                 description: '',
                                 images: [],
                             }}
@@ -124,49 +171,73 @@ const AddNewJim = () => {
                                         <label className="col-sm-3 col-form-label text-sm-end">Name</label>
                                         <div className="col-sm-9">
                                             <Field type="text" name="full_name" className="form-control" placeholder="Enter Name Here" />
-                                            <ErrorMessage name="full_name" component="div" className="text-danger" />
+                                            <ErrorMessage name="full_name" component="div" className="error-message" />
                                         </div>
                                     </div>
                                     <div className="row mb-3">
                                         <label className="col-sm-3 col-form-label text-sm-end">Email</label>
                                         <div className="col-sm-9">
                                             <Field type="text" name="email" className="form-control" placeholder="Enter Email Here" />
-                                            <ErrorMessage name="email" component="div" className="text-danger" />
+                                            <ErrorMessage name="email" component="div" className="error-message" />
                                         </div>
                                     </div>
                                     <div className="row mb-3">
                                         <label className="col-sm-3 col-form-label text-sm-end">Gym Name</label>
                                         <div className="col-sm-9">
                                             <Field type="text" name="gymName" className="form-control" placeholder="Enter Jim Name Here" />
-                                            <ErrorMessage name="gymName" component="div" className="text-danger" />
+                                            <ErrorMessage name="gymName" component="div" className="error-message" />
                                         </div>
                                     </div>
                                     <div className="row mb-3">
                                         <label className="col-sm-3 col-form-label text-sm-end">Contact</label>
                                         <div className="col-sm-9">
                                             <Field type="text" name="phone" className="form-control" placeholder="Enter Contact No. Here" maxLength={13} />
-                                            <ErrorMessage name="phone" component="div" className="text-danger" />
+                                            <ErrorMessage name="phone" component="div" className="error-message" />
                                         </div>
                                     </div>
                                     <div className="row mb-3">
                                         <label className="col-sm-3 col-form-label text-sm-end">City</label>
                                         <div className="col-sm-9">
                                             <Field type="text" name="city" className="form-control" placeholder="Enter city Here" />
-                                            <ErrorMessage name="city" component="div" className="text-danger" />
+                                            <ErrorMessage name="city" component="div" className="error-message" />
                                         </div>
                                     </div>
                                     <div className="row mb-3">
                                         <label className="col-sm-3 col-form-label text-sm-end">Address</label>
                                         <div className="col-sm-9">
                                             <Field type="text" name="gymAddress" className="form-control" placeholder="Enter Address Here" />
-                                            <ErrorMessage name="gymAddress" component="div" className="text-danger" />
+                                            <ErrorMessage name="gymAddress" component="div" className="error-message" />
                                         </div>
                                     </div>
+                                    <div className="row mb-3">
+                                    <label className="col-sm-3 col-form-label text-sm-end">Package</label>
+                                    <div className="col-sm-9">
+                                        <Field
+                                            as="select"
+                                            name="package"
+                                            className="form-select"
+                                            aria-label="Select Package"
+                                            onChange={(e) => {
+                                                const selectedPackageId = e.target.value;
+                                                setFieldValue("package", selectedPackageId);
+                                            }}
+                                        >
+                                            <option value="">Select Package</option>
+                                            {packagesData.length > 0 &&
+                                                packagesData.map((item) => (
+                                                    <option key={item._id} value={item._id} className='justify-content-between'>
+                                                        {item.name}  -------------- $ {item.price}
+                                                    </option>
+                                                ))}
+                                        </Field>
+                                        <ErrorMessage name="package" component="div" className="error-message" />
+                                    </div>
+                                </div>
                                     <div className="row mb-3">
                                         <label className="col-sm-3 col-form-label text-sm-end">Description</label>
                                         <div className="col-sm-9">
                                             <Field as="textarea" name="description" className="form-control message-input" placeholder="Enter Description Here" rows="4" />
-                                            <ErrorMessage name="description" component="div" className="text-danger" />
+                                            <ErrorMessage name="description" component="div" className="error-message" />
                                         </div>
                                     </div>
                                     <div className="row mb-3">
@@ -187,7 +258,7 @@ const AddNewJim = () => {
 
                                                             accept="image/*"
                                                         />
-                                                        <ErrorMessage name="images" component="div" className="text-danger" />
+                                                        <ErrorMessage name="images" component="div" className="error-message" />
                                                     </div>
                                                 )}
                                             </Field>
@@ -203,7 +274,7 @@ const AddNewJim = () => {
                                             >
                                                 <i className={`ti ti-eye${showPassword ? '-off' : ''}`}></i>
                                             </span>
-                                            <ErrorMessage name="password" component="div" className="text-danger" />
+                                            <ErrorMessage name="password" component="div" className="error-message" />
                                         </div>
                                     </div>
                                     <div className="pt-4">

@@ -78,17 +78,19 @@ const NewPackages = () => {
         getActivePackage()
     }, [])
     console.log("------------------------------", activePackage)
-
+console.log( "user.isJimAdminuser.isJimAdminuser.isJimAdmin",user.isJimAdmin)
     return (
         <>
             <div className="container-xxl flex-grow-1 container-p-y p-0">
 
                 <div className="container">
-                    <div className='d-flex justify-content-end mb-3'>
-                        <button className="btn btn-primary me-2 mt-2 pointer" onClick={HandleSHowUpdatePackageModel}>Add Package</button>
-                        <button className="btn btn-primary me-2 mt-2 pointer" onClick={HandleSHowUpdatePackageModelCustom}>Add Custom Package</button>
-                    </div>
-                    <PackagesModel HandleSHowUpdatePackageModel={HandleSHowUpdatePackageModel} showUpdatePackage={showUpdatePackage} type={isCustom ? "custom" : null} />
+                    {user.isJimAdmin && (<>
+                        <div className='d-flex justify-content-end mb-3'>
+                            <button className="btn btn-primary me-2 mt-2 pointer" onClick={HandleSHowUpdatePackageModel}>Add Package</button>
+                            <button className="btn btn-primary me-2 mt-2 pointer" onClick={HandleSHowUpdatePackageModelCustom}>Add Custom Package</button>
+                        </div>
+                        <PackagesModel HandleSHowUpdatePackageModel={HandleSHowUpdatePackageModel} showUpdatePackage={showUpdatePackage} type={isCustom ? "custom" : null} />
+                    </>)}
                     <div class="row">
                         <div class="col-md-12">
                             <div className="card mb-4">

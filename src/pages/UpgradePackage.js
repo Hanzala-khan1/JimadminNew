@@ -157,8 +157,8 @@ const UpgradePackage = () => {
                                 <div className="col-12 col-lg-8 mx-auto text-center mb-3">
                                     <h4 className="mt-2">Thank You! 😇</h4>
                                     <p>Your secussfully subscribed the Package</p>
-                                    <p>We sent an email to <a href="mailto:john.doe@example.com">john.doe@example.com</a> with your order confirmation and receipt. If the email hasn't arrived within two minutes, please check your spam folder to see if the email was routed there.</p>
-                                    <p><span className="fw-medium"><i className="ti ti-clock me-1"></i> Time placed:&nbsp;</span> 25/05/2020 13:35pm</p>
+                                    <p>Thank you! We've recieved your order confirmation. Thanks!</p>
+                                    {/* <p><span className="fw-medium"><i className="ti ti-clock me-1"></i> Time placed:&nbsp;</span> </p> */}
                                 </div>
                             </div>
                         )

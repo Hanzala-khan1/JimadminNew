@@ -62,7 +62,7 @@ const Login = () => {
     } catch (error) {
       console.error("Login error:", error);
       console.log("error.response.data.message", error)
-      toast.error(error?.response?.data?.message || "Login failed. Please try again.", {
+      toast.error(error?.response?.data?.message? "Invalid credential" : "Login failed. Please try again.", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

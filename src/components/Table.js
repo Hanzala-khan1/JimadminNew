@@ -9,8 +9,8 @@ import UserDetails from './UserDetail';
 const Table = ({ data, pagination, onPageChange, reloadUsers, type }) => {
     const { page, totalPages } = pagination;
     let token = localStorage.getItem("token")
-    const [showDetails, setShowDetails] = useState()
-    const [detailsData, setDetailsData] = useState()
+    const [showDetails, setShowDetails] = useState(false)
+    const [detailsData, setDetailsData] = useState(null)
     let HandleUpdateUser = async (status, id) => {
         try {
             console.log("idididiidididididididid", id)

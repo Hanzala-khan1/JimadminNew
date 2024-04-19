@@ -104,7 +104,7 @@ const AdminPackages = () => {
                         </div>
                     </div>
                 </div>
-                <PackagesModel HandleSHowUpdatePackageModel={HandleSHowUpdatePackageModel} showUpdatePackage={showUpdatePackage}/>
+                <PackagesModel HandleSHowUpdatePackageModel={HandleSHowUpdatePackageModel} showUpdatePackage={showUpdatePackage} previousData={activePackage}/>
                 <section className="choseus-section spad mt-3">
                     <div className="container">
                         <div className="row">

@@ -13,9 +13,9 @@ const PackageSchema = Yup.object().shape({
     user: Yup.string(),
 });
 
-const PackagesModel = ({ showUpdatePackage, HandleSHowUpdatePackageModel, type="other" }) => {
+const PackagesModel = ({ showUpdatePackage, HandleSHowUpdatePackageModel, type="other",previousData }) => {
     const [userData, setUserData] = useState([]);
-
+console.log("previousDatapreviousData",previousData)
     let user = JSON.parse(localStorage.getItem('user'))
     let token = localStorage.getItem('token')
     let activegym = localStorage.getItem('activegym')
@@ -127,9 +127,9 @@ const PackagesModel = ({ showUpdatePackage, HandleSHowUpdatePackageModel, type="
                 </Modal.Header>
                 <Formik
                     initialValues={{
-                        name: '',
-                        price: '',
-                        description: '',
+                        name: previousData? previousData.name:"",
+                        price: previousData? previousData.price:"",
+                        description: previousData? previousData.description:"",
                         user:''
                     }}
                     validationSchema={PackageSchema}

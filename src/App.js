@@ -11,6 +11,7 @@ import NewGymRequests from './pages/NewGymRequests';
 import NewPackages from './pages/NewPackages';
 import UpgradePackage from './pages/UpgradePackage';
 import AdminPackages from './pages/AdminPackages';
+import AdminContact from './pages/AdminContact';
 
 // Lazy-loaded components
 const DashBoard = React.lazy(() => import('./pages/DashBoard'));
@@ -71,6 +72,7 @@ function AuthenticatedApp() {
         <Route path="/Other-jims" element={<Otherjims />} />
         <Route path="/earning" element={<Earning />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/admin-contact" element={<AdminContact />} />
         <Route path="/packages" element={<Packages />} />
         <Route path="/newpackages" element={<NewPackages />} />
         <Route path="/admin-packages" element={<AdminPackages />} />

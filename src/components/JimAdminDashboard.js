@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { App_host } from '../Data';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClockRotateLeft, faCoins, faCubes, faHourglassHalf, faIndianRupeeSign, faUserClock } from '@fortawesome/free-solid-svg-icons';
+import PeakHoursChart from './shared/PeakHoursChart';
 
 const JimAdminDashboard = () => {
     const [activeUser, setActiveUser] = useState(0);
     const [totalUser, settotalUser] = useState(0);
-    const [dashBoardData,setDashboardData]=useState()
+    const [dashBoardData, setDashboardData] = useState()
 
     const token = localStorage.getItem('token');
     const activegym = localStorage.getItem("activegym")
@@ -28,7 +29,7 @@ const JimAdminDashboard = () => {
             setActiveUser(activeuser.data.data.active_users)
         }
     }
-    
+
     const getPackagesList = async () => {
         try {
             const response = await axios.get(`${App_host}/earning/getDashboardDetails`, {
@@ -46,7 +47,6 @@ const JimAdminDashboard = () => {
     useEffect(() => {
         getActiveUser();
         getPackagesList()
-
     }, []);
 
     return (
@@ -88,8 +88,8 @@ const JimAdminDashboard = () => {
                                         <div className="col-md-6 col-6">
                                             <div className="d-flex align-items-center">
                                                 <div className="badge rounded-pill bg-label-primary me-3 p-2">
-                                                <FontAwesomeIcon icon={faClockRotateLeft} />
-                                                    </div>
+                                                    <FontAwesomeIcon icon={faClockRotateLeft} />
+                                                </div>
                                                 <div className="card-info">
                                                     <h5 className="mb-0">{activeUser}</h5>
                                                     <small>Active Users</small>
@@ -177,25 +177,29 @@ const JimAdminDashboard = () => {
                             </div>
                         </div>
                         <div className="col-12 col-xl-12 mb-4">
-                            <div className="card">
-                                <div className="card-body p-0">
+                            <div className="row">
+                                {/* <div className="card-body p-0">
                                     <div className="row row-bordered g-0">
-                                        <div className="col-md-12 position-relative p-4">
-                                            <div className="card-header d-inline-block p-0 text-wrap position-absolute">
+                                        <div className="col-md-12 position-relative p-4"> */}
+                                            <div className="col-12 ">
                                                 <h5 className="m-0 card-title">Peak Hours</h5>
                                             </div>
-                                            <div id="totalRevenueChart" className="mt-n1"></div>
-                                        </div>
+                                            <div id="col-12" className="mt-n1" style={{
+                                                width:"50%",
+                                                margin:"auto",
+                                                marginTop:"100px"
+
+                                            }}>
+                                                <PeakHoursChart />
+                                            </div>
+                                        {/* </div>
 
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
-
-
                 </div>
-
                 <div className="content-backdrop fade"></div>
             </div>
         </>

@@ -126,10 +126,10 @@ const GymsPopup = ({ showPackages, handleShowpackage, gymid }) => {
                             <div className="py-0 rounded-top">
                                 <h2 className="text-center mb-2">Select package</h2>
                                 <div className="d-flex align-items-center justify-content-center flex-wrap gap-2 pt-3 mb-4">
-                                    <div className="mt-n5 ms-n5 d-none d-sm-block">
+                                    {/* <div className="mt-n5 ms-n5 d-none d-sm-block">
                                         <FontAwesomeIcon icon={faCheckCircle} className="ti ti-corner-left-down ti-sm text-muted me-1 scaleX-n1-rtl" />
                                         <span className="badge badge-sm bg-label-primary">Save up to 10%</span>
-                                    </div>
+                                    </div> */}
 
                                     <div className="row mx-0 gy-3">
                                         {packagesData.length > 0 ? (
@@ -159,13 +159,16 @@ const GymsPopup = ({ showPackages, handleShowpackage, gymid }) => {
                                                     </>
                                                 )
                                             })) : (
-                                            <> <div className="col-lg-3 col-md-6 col-sm-6 mb-4 " >
-                                                <div className="card h-100 border" style={{
-                                                    border: '1px solid #007bff'
-                                                }}>
-                                                    <div className="card-body"> no available Package to Show</div>
+                                            <>
+                                                <div className="col-lg-12 col-md-12 col-sm-12 mb-4 " >
+                                                    <div className="card h-100 border" style={{
+                                                        border: '1px solid #007bff'
+                                                    }}>
+                                                        <div className="card-body">
+                                                            <h5 className="card-title">No  avaiable content to hamza</h5>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             </>
                                         )}
                                     </div>

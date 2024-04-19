@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { json, useNavigate } from 'react-router-dom';
+import UserDetails from '../UserDetail';
 
 const TopNav = ({handleShowNav}) => {
     const [topNavHeading, setTopNavHeading] = useState('');
+    const [showDetails, setShowDetails] = useState(false)
+    const [detailsData, setDetailsData] = useState(null)
+
     const gymDetail = JSON.parse(localStorage.getItem('gymDetail'));
     const user = JSON.parse(localStorage.getItem('user'));
+    console.log("const user = JSON.parse(localStorage.getItem('user'))",user)
     const role = localStorage.getItem('role');
     const navigate = useNavigate();
 
@@ -26,8 +31,12 @@ const TopNav = ({handleShowNav}) => {
         localStorage.removeItem('role');
         localStorage.removeItem('token');
         localStorage.removeItem('activegym');
+        localStorage.removeItem('gymDetail');
         window.location.reload();
     };
+    let handleShowDeatils = (data = null) => {
+        setShowDetails(!showDetails)
+    }
     return (
         <>
             <nav className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
@@ -273,7 +282,7 @@ const TopNav = ({handleShowNav}) => {
                                     <div class="dropdown-divider"></div>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="pages-profile-user.html">
+                                    <a class="dropdown-item" onClick={handleShowDeatils}>
                                         <i class="ti ti-user-check me-2 ti-sm"></i>
                                         <span class="align-middle">My Profile</span>
                                     </a>
@@ -284,9 +293,9 @@ const TopNav = ({handleShowNav}) => {
                                 </li>
 
                                 <li>
-                                    <p class="dropdown-item">
+                                    <p class="dropdown-item" onClick={handleLogout}>
                                         <i class="ti ti-logout me-2 ti-sm"></i>
-                                        <span class="align-middle" onClick={handleLogout}>Log Out</span>
+                                        <span class="align-middle" >Log Out</span>
                                     </p>
                                 </li>
                             </ul>
@@ -298,6 +307,9 @@ const TopNav = ({handleShowNav}) => {
                     <i className="ti ti-x ti-sm search-toggler cursor-pointer"></i>
                 </div>
             </nav>
+            {user && 
+            <UserDetails showDetails={showDetails} handleShowDeatils={handleShowDeatils} Data={user} type={"user"}/>
+}
         </>
     )
 }

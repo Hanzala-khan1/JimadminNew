@@ -32,7 +32,7 @@ const Sidebar = ({ handleShowNav }) => {
             { label: 'Add New Gym', link: '/add-new-jim', icon: faSquarePlus },
             { label: 'Packages', link: '/admin-packages', icon: faCubes },
             { label: 'Earnings', link: '/earning', icon: faIndianRupeeSign },
-            { label: 'Contact Queries', link: '/contact', icon: faPhoneVolume }
+            { label: 'Contact Queries', link: '/admin-contact', icon: faPhoneVolume }
         ],
         jimAdmin: [
             { label: 'Dashboard', link: '/', icon: faHome },

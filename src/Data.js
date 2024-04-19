@@ -1,1 +1,1 @@
-export const App_host="http://127.0.0.1:8000/v1"
+export const App_host="http://93.127.198.231:8000/v1"

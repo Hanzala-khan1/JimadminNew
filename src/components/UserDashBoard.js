@@ -248,17 +248,28 @@ const UserDashBoard = () => {
               </div>
             </div>
             <div className="col-12 col-xl-12 mb-4">
-              <div className="card">
-                <div className="card-body p-0">
-                  <div className="row row-bordered g-0">
-                    <div className="col-md-12 position-relative p-4">
-                      <div className="card-header d-inline-block p-0 text-wrap position-absolute">
-                        <h5 className="m-0 card-title">Peak Hours</h5>
-                      </div>
-                      {/* <PeakHoursChart/> */}
-                    </div>
-                  </div>
+              <div className="row">
+                {/* <div className="card-body p-0">
+                                    <div className="row row-bordered g-0">
+                                        <div className="col-md-12 position-relative p-4"> */}
+                <div className="col-12 ">
+                  <h5 className="m-0 card-title">Peak Hours</h5>
                 </div>
+                <div
+                  id="col-12"
+                  className="mt-n1"
+                  style={{
+                    width: "50%",
+                    margin: "auto",
+                    marginTop: "100px",
+                  }}
+                >
+                  <PeakHoursChart />
+                </div>
+                {/* </div>
+
+                                    </div>
+                                </div> */}
               </div>
             </div>
           </div>

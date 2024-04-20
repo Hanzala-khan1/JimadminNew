@@ -22,7 +22,7 @@ const TopNav = ({ handleShowNav }) => {
         getnotifications()
         if (user) {
             if (user.isAdmin) {
-                setTopNavHeading('Super Admin Panel');
+                setTopNavHeading('Admin');
             } else if (user.isJimAdmin) {
                 setTopNavHeading(gymDetail.name);
             } else {

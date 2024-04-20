@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { Bounce, toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { App_host } from "../Data";
 
 const Login = () => {
@@ -13,12 +13,12 @@ const Login = () => {
 
   const initialValues = {
     email: "",
-    password: ""
+    password: "",
   };
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string().required("Required")
+    password: Yup.string().required("Required"),
   });
 
   const handleLogin = async (values, { setSubmitting }) => {
@@ -29,9 +29,12 @@ const Login = () => {
       console.log("token", data.data.token);
       localStorage.setItem("user", JSON.stringify(data.data.info));
       if (!data.data.info.isAdmin) {
-        let Gym = data.data.info?.BusinessLocation[0]?.Gym
-        localStorage.setItem("activegym", data.data.info?.BusinessLocation[0]?.Gym?._id.toString())
-        localStorage.setItem("gymDetail", JSON.stringify(Gym))
+        let Gym = data.data.info?.BusinessLocation[0]?.Gym;
+        localStorage.setItem(
+          "activegym",
+          data.data.info?.BusinessLocation[0]?.Gym?._id.toString()
+        );
+        localStorage.setItem("gymDetail", JSON.stringify(Gym));
       }
       localStorage.setItem("token", data.data.token);
 
@@ -45,7 +48,7 @@ const Login = () => {
       }
 
       // if (data?.success) {
-      toast.success('Login Successfully', {
+      toast.success("Login Successfully", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -61,18 +64,23 @@ const Login = () => {
       window.location.reload();
     } catch (error) {
       console.error("Login error:", error);
-      console.log("error.response.data.message", error)
-      toast.error(error?.response?.data?.message? "Invalid credential" : "Login failed. Please try again.", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      console.log("error.response.data.message", error);
+      toast.error(
+        error?.response?.data?.message
+          ? "Invalid credential"
+          : "Login failed. Please try again.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        }
+      );
     } finally {
       setSubmitting(false);
     }
@@ -80,8 +88,8 @@ const Login = () => {
 
   return (
     <>
-      <div className="login-container">
-        <div className="left-content d-none d-sm-flex justify-content-center">
+      <div className="login-container relative">
+        <div className="left-content d-sm-flex justify-content-center ">
           {/* <div className="left-content-inner">
             <h3 className="flexFlow">
               Flex flow:
@@ -94,7 +102,7 @@ const Login = () => {
         </div>
 
         <div className="right-content row">
-          <div className="right-content-inner row" >
+          <div className="right-content-inner row">
             <div className="logimg">
               {/* <img src={logo} alt="Logo" /> */}
               {/* <div id="logtext" >
@@ -109,12 +117,30 @@ const Login = () => {
             >
               <Form className="form-group">
                 <label htmlFor="email">E-Mail Address</label>
-                <ErrorMessage name="email" component="div" className="error-message" />
-                <Field type="email" id="email" name="email" placeholder="Enter Email" />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="error-message"
+                />
+                <Field
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Enter Email"
+                />
 
                 <label htmlFor="password">Password</label>
-                <ErrorMessage name="password" component="div" className="error-message" />
-                <Field type="password" id="password" name="password" placeholder="Enter Password" />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="error-message"
+                />
+                <Field
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Enter Password"
+                />
 
                 <button type="submit" className="btn1">
                   Login

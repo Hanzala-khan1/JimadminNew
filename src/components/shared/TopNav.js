@@ -46,7 +46,7 @@ const TopNav = ({ handleShowNav }) => {
             console.error('Error fetching users:', error);
         }
     }
-    let markasRead=async()=>{
+    let markasRead = async () => {
         try {
             const response = await axios.get(`${App_host}/notifications/markread`, {
                 headers: {
@@ -57,7 +57,7 @@ const TopNav = ({ handleShowNav }) => {
             console.error('Error fetching users:', error);
         }
     }
-    const deleteNotification=async(id)=>{
+    const deleteNotification = async (id) => {
         try {
             const response = await axios.get(`${App_host}/notifications/delete?id=${id}`, {
                 headers: {
@@ -83,15 +83,27 @@ const TopNav = ({ handleShowNav }) => {
     let handleShowDeatils = (data = null) => {
         setShowDetails(!showDetails)
     }
+
     return (
         <>
-            <nav className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
-                <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none" onClick={handleShowNav}>
-                    <a className="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+            <nav
+                className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                id="layout-navbar"
+            >
+                <div
+                    className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none"
+                    onClick={handleShowNav}
+                >
+                    <a
+                        className="nav-item nav-link px-0 me-xl-4"
+                        href="javascript:void(0)"
+                    >
                         <i className="ti ti-menu-2 ti-sm"></i>
                     </a>
                 </div>
-                <span className="app-brand-text demo menu-text fw-bold">{topNavHeading}</span>
+                <span className="app-brand-text demo menu-text fw-bold">
+                    {topNavHeading}
+                </span>
                 <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                     <ul className="navbar-nav flex-row align-items-center ms-auto">
                         {/* Notification */}
@@ -127,7 +139,7 @@ const TopNav = ({ handleShowNav }) => {
                                                                     <span class="badge badge-dot"></span>
                                                                 </a>)
                                                             }
-                                                            <a href="javascript:void(0)" class="dropdown-notifications-archive" onClick={()=>deleteNotification(noti._id.toString())}><span
+                                                            <a href="javascript:void(0)" class="dropdown-notifications-archive" onClick={() => deleteNotification(noti._id.toString())}><span
                                                                 class="ti ti-x"></span></a>
                                                         </div>
                                                     </div>
@@ -137,17 +149,7 @@ const TopNav = ({ handleShowNav }) => {
                                         ) : (
                                             <li class="list-group-item list-group-item-action dropdown-notifications-item">
                                                 <div class="d-flex">
-                                                    <div class="flex-grow-1">
-                                                        <h6 class="mb-1">Congratulation Lettie 🎉</h6>
-                                                        <p class="mb-0">Won the monthly best seller gold badge</p>
-                                                        <small class="text-muted">1h ago</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span
-                                                            class="badge badge-dot"></span></a>
-                                                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
-                                                            class="ti ti-x"></span></a>
-                                                    </div>
+                                                   no available notifications
                                                 </div>
                                             </li>
                                         )}
@@ -214,4 +216,4 @@ const TopNav = ({ handleShowNav }) => {
     )
 }
 
-export default TopNav
+export default TopNav;

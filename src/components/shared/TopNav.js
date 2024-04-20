@@ -21,7 +21,7 @@ const TopNav = ({ handleShowNav }) => {
     useEffect(() => {
         getnotifications()
         if (user) {
-            if (user.isAdmin) {
+            if (user?.isAdmin) {
                 setTopNavHeading('Admin');
             } else if (user.isJimAdmin) {
                 setTopNavHeading(gymDetail.name);
@@ -108,7 +108,7 @@ const TopNav = ({ handleShowNav }) => {
                     <ul className="navbar-nav flex-row align-items-center ms-auto">
                         {/* Notification */}
                         <li className="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
-                            {(user.isAdmin || user.isJimAdmin) &&
+                            {(user?.isAdmin || user?.isJimAdmin) &&
                                 (<a className="nav-link dropdown-toggle hide-arrow" onClick={markasRead} href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                     <i className="ti ti-bell ti-md"></i>
                                     <span className="badge bg-danger rounded-pill badge-notifications">{count}</span>
@@ -161,7 +161,7 @@ const TopNav = ({ handleShowNav }) => {
                         <li className="nav-item navbar-dropdown dropdown-user dropdown">
                             <a className="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                 <div className="avatar avatar-online">
-                                    <img src={user.images} alt className="h-70 rounded-circle" />
+                                    <img src={user?.images} alt className="h-70 rounded-circle" />
                                 </div>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -170,11 +170,11 @@ const TopNav = ({ handleShowNav }) => {
                                         <div class="d-flex">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar avatar-online">
-                                                    <img src={user.images} alt className="h-70 rounded-circle" />
+                                                    <img src={user?.images} alt className="h-70 rounded-circle" />
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <span class="fw-medium d-block">{user.full_name}</span>
+                                                <span class="fw-medium d-block">{user?.full_name}</span>
                                                 <small class="text-muted">{role == "jimAdmin" ? "jim Admin" : role}</small>
                                             </div>
                                         </div>

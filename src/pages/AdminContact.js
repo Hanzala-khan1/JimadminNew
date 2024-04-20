@@ -24,7 +24,7 @@ const AdminContact = () => {
                     token,
                 },
             });
-console.log("================",response)
+            console.log("================", response)
             let { results, ...otherPages } = response.data.data
             setContact(results);
             setLimit(otherPages.limit)
@@ -94,11 +94,11 @@ console.log("================",response)
         setPage(page)
     }
 
-    const pageNumbers = Array.from({ length:totalPages ? totalPages : 1 }, (_, index) => index + 1);
+    const pageNumbers = Array.from({ length: totalPages ? totalPages : 1 }, (_, index) => index + 1);
 
     return (
         <>
-            <div>
+            <div className="overflow-auto">
                 <table className="dt-multilingual table dataTable no-footer dtr-column"
                     id="DataTables_Table_3" aria-describedby="DataTables_Table_3_info"
                     style={{ width: "1045px" }}>

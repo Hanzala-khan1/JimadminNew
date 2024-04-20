@@ -21,8 +21,8 @@ const NewRequest = () => {
                     page,
                     limit,
                     search: search.trim(),
-                    status:"inactive",
-                    BusinessLocation:activegym
+                    status: "inactive",
+                    BusinessLocation: activegym
                 },
                 headers: {
                     token,
@@ -60,9 +60,10 @@ const NewRequest = () => {
                 <h5 className="card-header">All {user?.BusinessLocation[0]?.Gym?.name} Member</h5>
                 <div className="card-datatable table-responsive">
                     <div className="row">
-                        <div className="col-sm-12 col-md-6">
+                        <div className="col-6 col-sm-6 col-md-6">
                             <div className="dataTables_length" id="DataTables_Table_3_length">
-                                <label>
+                                <label className="d-flex align-items-center flex-row mw-100">
+                                    <div className="text-nowrap pr-2">Show Results</div>
                                     <select
                                         value={limit}
                                         onChange={(e) => handleLimitChange(e.target.value)}
@@ -75,26 +76,26 @@ const NewRequest = () => {
                                         <option value="75">75</option>
                                         <option value="100">100</option>
                                     </select>
-                                    Show Results
                                 </label>
                             </div>
                         </div>
-                        <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
+                        <div className="col-6 col-sm-6 col-md-6 d-flex justify-content-center justify-content-md-end">
                             <div className="dataTables_filter">
                                 <label>
-                                    Search
                                     <input
                                         type="search"
                                         value={search}
                                         onChange={handleSearchChange}
                                         className="form-control form-control-sm"
-                                        placeholder=""
+                                        placeholder="Search"
                                     />
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <Table data={userData} pagination={pagination} onPageChange={handlePageChange}  reloadUsers={fetchUsers}/>
+                    <div className="overflow-auto">
+                        <Table data={userData} pagination={pagination} onPageChange={handlePageChange} reloadUsers={fetchUsers} />
+                    </div>
                 </div>
             </div>
         </div>

@@ -203,9 +203,9 @@ const JimAdminDashboard = () => {
                 </div>
                 <div
                   id="col-12"
-                  className="mt-n1"
+                  className="mt-n1 col-12 col-md-6 mx-auto"
                   style={{
-                    width: "50%",
+                    // width: "100%",
                     margin: "auto",
                     marginTop: "100px",
                   }}

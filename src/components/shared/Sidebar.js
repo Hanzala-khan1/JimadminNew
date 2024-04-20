@@ -79,7 +79,7 @@ const Sidebar = ({ handleShowNav }) => {
             const isActive = location.pathname === item.link;
 
             return (
-                <li className={`menu-item ${isActive ? 'active' : ''}`} key={index}>
+                <li className={`menu-item ${isActive ? 'active' : ''}`} key={index} onClick={()=>handleShowNav(false)}>
                     {item.submenu ? (
                         <a className="menu-link menu-toggle" onClick={toggleActiveGyms}>
                             <FontAwesomeIcon icon={item.icon} className="menu-icon" />
